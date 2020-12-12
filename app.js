@@ -119,16 +119,16 @@ const employeeQuestions = [
 ];
 
 function buildTeamList() {
-  inquire.prompt(employeeQuestions).then((employeeInfo) => {
+  inquirer.prompt(employeeQuestions).then((employeeInfo) => {
     if (employeeInfo.role == "engineer") {
-      let newMember = new Engineer(
+      var newMember = new Engineer(
         employeeInfo.name,
         teamList.length + 1,
         employeeInfo.email,
         employeeInfo.github
       );
     } else {
-      let newMember = new Intern(
+      var newMember = new Intern(
         employeeInfo.name,
         teamList.length + 1,
         employeeInfo.email,
@@ -146,12 +146,21 @@ function buildTeamList() {
 }
 
 function buildHtmlPage() {
-  let newFile = fs.readFileSync("./templates/main.html");
-  fs.writeFileSync("./output/teamPage.html", newFile, function (err) {
-    if (err) throw err;
+  const mainHTML = fs.readFileSync("./templates/main.html");
+  newFile = eval("`" + mainHTML + "`");
+  fs.writeFile("./lib/htmlRenderer", newFile, function (err) {
+    if (err) {
+      return console.log(err);
+    }
+
+    console.log("Success!");
   });
 
-  console.log("Base page generated!");
+  //fs.writeFileSync("./output/team.html", newFile, function (err) {
+  //if (err) throw err;
+  //});
+
+  //console.log("Base page generated!");
 
   for (member of teamList) {
     if (member.getRole() == "Manager") {
