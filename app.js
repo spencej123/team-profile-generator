@@ -10,7 +10,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const teamList = [];
+let teamList = [];
 const managerQuestions = [
   {
     type: "input",
@@ -191,7 +191,7 @@ function buildHtmlPage() {
 }
 
 function init() {
-  inquire.prompt(managerQuestions).then((managerInfo) => {
+  inquirer.prompt(managerQuestions).then((managerInfo) => {
     let teamManager = new Manager(
       managerInfo.name,
       1,
@@ -207,5 +207,4 @@ function init() {
     }
   });
 }
-
 init();
