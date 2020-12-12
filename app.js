@@ -189,3 +189,23 @@ function buildHtmlPage() {
   );
   console.log("Page tags closed! Operation completed.");
 }
+
+function init() {
+  inquire.prompt(managerQuestions).then((managerInfo) => {
+    let teamManager = new Manager(
+      managerInfo.name,
+      1,
+      managerInfo.email,
+      managerInfo.officeNum
+    );
+    teamList.push(teamManager);
+    console.log(" ");
+    if (managerInfo.hasTeam === "Yes") {
+      buildTeamList();
+    } else {
+      buildHtmlPage();
+    }
+  });
+}
+
+init();
