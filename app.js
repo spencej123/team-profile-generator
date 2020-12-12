@@ -121,14 +121,14 @@ const employeeQuestions = [
 function buildTeamList() {
   inquire.prompt(employeeQuestions).then((employeeInfo) => {
     if (employeeInfo.role == "engineer") {
-      var newMember = new Engineer(
+      let newMember = new Engineer(
         employeeInfo.name,
         teamList.length + 1,
         employeeInfo.email,
         employeeInfo.github
       );
     } else {
-      var newMember = new Intern(
+      let newMember = new Intern(
         employeeInfo.name,
         teamList.length + 1,
         employeeInfo.email,
@@ -143,4 +143,49 @@ function buildTeamList() {
       buildHtmlPage();
     }
   });
+}
+
+function buildHtmlPage() {
+  let newFile = fs.readFileSync("./templates/main.html");
+  fs.writeFileSync("./output/teamPage.html", newFile, function (err) {
+    if (err) throw err;
+  });
+
+  console.log("Base page generated!");
+
+  for (member of teamList) {
+    if (member.getRole() == "Manager") {
+      buildHtmlCard(
+        "manager",
+        member.getName(),
+        member.getId(),
+        member.getEmail(),
+        "Office: " + member.getOfficeNumber()
+      );
+    } else if (member.getRole() == "Engineer") {
+      buildHtmlCard(
+        "engineer",
+        member.getName(),
+        member.getId(),
+        member.getEmail(),
+        "Github: " + member.getGithub()
+      );
+    } else if (member.getRole() == "Intern") {
+      buildHtmlCard(
+        "intern",
+        member.getName(),
+        member.getId(),
+        member.getEmail(),
+        "School: " + member.getSchool()
+      );
+    }
+  }
+  fs.appendFileSync(
+    "./output/teamPage.html",
+    "</div></main></body></html>",
+    function (err) {
+      if (err) throw err;
+    }
+  );
+  console.log("Page tags closed! Operation completed.");
 }
